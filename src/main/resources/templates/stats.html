@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Статистика</title>
+</head>
+
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+
+<div class="h-100 w-100 position-fixed" style="background: url(&quot;/img/bg.jpg&quot;) center / cover no-repeat"></div>
+
+<div th:insert="blocks/nav :: nav"></div>
+
+<section class="py-5 position-sticky">
+    <div class="container py-5">
+        <div class="row justify-content-center mb-5">
+            <div class="col-6 text-center bg-dark rounded">
+                <h1 class="m-1">Статистика</h1>
+            </div>
+        </div>
+        <div class="row bg-dark rounded p-3 mb-5">
+            <div class="col-12" hidden>
+                <p th:text="${football}" id="football"></p>
+                <p th:text="${hockey}" id="hockey"></p>
+                <p th:text="${volleyball}" id="volleyball"></p>
+                <p th:text="${basketball}" id="basketball"></p>
+                <p th:text="${baseball}" id="baseball"></p>
+                <p th:text="${tennis}" id="tennis"></p>
+            </div>
+            <div class="col-12 mb-3 mt-2" data-aos="fade-up">
+                <div id="drawCategory" class="w-100" style="height: 500px"></div>
+            </div>
+            <hr data-aos="fade-up">
+            <form action="/stats/sort" method="get" class="mb-3" data-aos="fade-up">
+                <div class="row">
+                    <div class="col">
+                        <select class="form-select" name="category" required>
+                            <option th:each="c : ${categories}" th:value="${c}" th:label="${c.name}"
+                                    th:selected="${c == category}"></option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <select class="form-select" name="sort" required>
+                            <option th:each="s : ${sorts}" th:value="${s}" th:label="${s.name}"
+                                    th:selected="${s == sort}"></option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary">Сортировать</button>
+                    </div>
+                </div>
+            </form>
+            <hr data-aos="fade-up">
+            <div class="col-12" hidden>
+                <span id="topName0" th:text="${topName[0]}"></span>
+                <span id="topNumber0" th:text="${topNumber[0]}"></span>
+                <span id="topName1" th:text="${topName[1]}"></span>
+                <span id="topNumber1" th:text="${topNumber[1]}"></span>
+                <span id="topName2" th:text="${topName[2]}"></span>
+                <span id="topNumber2" th:text="${topNumber[2]}"></span>
+                <span id="topName3" th:text="${topName[3]}"></span>
+                <span id="topNumber3" th:text="${topNumber[3]}"></span>
+                <span id="topName4" th:text="${topName[4]}"></span>
+                <span id="topNumber4" th:text="${topNumber[4]}"></span>
+            </div>
+            <div class="col-12 mb-3" data-aos="fade-up">
+                <div id="drawWin" class="w-100" style="height: 500px"></div>
+            </div>
+            <hr data-aos="fade-up">
+            <div class="col-12" hidden>
+                <p th:text="${waiting}" id="waiting"></p>
+                <p th:text="${progress}" id="progress"></p>
+                <p th:text="${finish}" id="finish"></p>
+            </div>
+            <div class="col-12 mb-3" data-aos="fade-up">
+                <div id="drawStatus" class="w-100" style="height: 500px"></div>
+            </div>
+            <hr data-aos="fade-up">
+            <div class="col-12 text-center mb-2" data-aos="fade-up">
+                <div class="row">
+                    <div class="col">
+                        <p class="lead">Название команды</p>
+                    </div>
+                    <div class="col">
+                        <p class="lead">Средний процент предположений</p>
+                    </div>
+                    <div class="col">
+                        <p class="lead">Средний процент побед</p>
+                    </div>
+                </div>
+            </div>
+            <div th:each="i : ${stats}" class="col-12 text-center mb-2" data-aos="fade-up">
+                <div class="row">
+                    <div class="col">
+                        <p class="lead" th:text="${i.team.name}"></p>
+                    </div>
+                    <div class="col">
+                        <p class="lead" th:text="${i.AverageVote()}"></p>
+                    </div>
+                    <div class="col">
+                        <p class="lead" th:text="${i.AverageWin()}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:insert="blocks/scripts :: scripts"></div>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load("current", {packages: ['corechart']});
+    google.charts.setOnLoadCallback(drawCategory);
+    google.charts.setOnLoadCallback(drawStatus);
+    google.charts.setOnLoadCallback(drawWin);
+
+    function drawWin() {
+        var topName0 = document.querySelector('#topName0').textContent;
+        var topNumber0 = parseInt(document.querySelector('#topNumber0').textContent);
+        var topName1 = document.querySelector('#topName1').textContent;
+        var topNumber1 = parseInt(document.querySelector('#topNumber1').textContent);
+        var topName2 = document.querySelector('#topName2').textContent;
+        var topNumber2 = parseInt(document.querySelector('#topNumber2').textContent);
+        var topName3 = document.querySelector('#topName3').textContent;
+        var topNumber3 = parseInt(document.querySelector('#topNumber3').textContent);
+        var topName4 = document.querySelector('#topName4').textContent;
+        var topNumber4 = parseInt(document.querySelector('#topNumber4').textContent);
+        var data = google.visualization.arrayToDataTable([
+            ['Команда', 'Средний процент', {role: 'style'}, {role: 'annotation'}],
+            [topName0, topNumber0, "red", topNumber0],
+            [topName1, topNumber1, "brown", topNumber1],
+            [topName2, topNumber2, "green", topNumber2],
+            [topName3, topNumber3, "blue", topNumber3],
+            [topName4, topNumber4, "purple", topNumber4],
+        ]);
+
+        var options = {
+            title: 'Топ-5 по среднему проценту',
+            hAxis: {title: 'Команда'},
+            vAxis: {title: 'Средний процент'},
+            bar: {groupWidth: "80%"},
+            legend: {position: "none"}
+        };
+        var chart = new google.visualization.ColumnChart(document.getElementById('drawWin'));
+        chart.draw(data, options);
+    }
+
+    function drawCategory() {
+        var football = parseInt(document.querySelector('#football').textContent);
+        var hockey = parseInt(document.querySelector('#hockey').textContent);
+        var volleyball = parseInt(document.querySelector('#volleyball').textContent);
+        var basketball = parseInt(document.querySelector('#basketball').textContent);
+        var baseball = parseInt(document.querySelector('#baseball').textContent);
+        var tennis = parseInt(document.querySelector('#tennis').textContent);
+        var data = google.visualization.arrayToDataTable([
+            ['Категория', 'Количество матчей'],
+            ['Футбол', football],
+            ['Хоккей', hockey],
+            ['Волейбол', volleyball],
+            ['Баскетбол', basketball],
+            ['Бейсбол', baseball],
+            ['Теннис', tennis],
+        ]);
+
+        var options = {
+            title: 'Количество матчей по категориям',
+            pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('drawCategory'));
+        chart.draw(data, options);
+    }
+
+    function drawStatus() {
+        var waiting = parseInt(document.querySelector('#waiting').textContent);
+        var progress = parseInt(document.querySelector('#progress').textContent);
+        var finish = parseInt(document.querySelector('#finish').textContent);
+        var data = google.visualization.arrayToDataTable([
+            ['Статус', 'Количество матчей'],
+            ['Предстоит', waiting],
+            ['Проходит', progress],
+            ['Завершено', finish],
+        ]);
+
+        var options = {
+            title: 'Количество матчей по статусам',
+            pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('drawStatus'));
+        chart.draw(data, options);
+    }
+</script>
+
+</body>
+
+</html>

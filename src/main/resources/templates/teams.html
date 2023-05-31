@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Команды</title>
+</head>
+
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+
+<div class="h-100 w-100 position-fixed" style="background: url(&quot;/img/bg.jpg&quot;) center / cover no-repeat"></div>
+
+<div th:insert="blocks/nav :: nav"></div>
+
+<section class="py-5 position-sticky">
+    <div class="container py-5">
+        <div class="row justify-content-center mb-5">
+            <div class="col-6 text-center bg-dark rounded">
+                <h1 class="m-1">Команды</h1>
+            </div>
+        </div>
+        <div th:if="${role == 'MANAGER'}" class="row justify-content-center mb-5">
+            <div class="col-4 text-center"><a class="btn btn-primary w-100" role="button" href="/teams/add">Добавить</a>
+            </div>
+        </div>
+        <form class="bg-dark rounded mb-5 p-2" action="/teams/search/" method="get">
+            <div class="row">
+                <div class="col-auto text-center">
+                    <a class="btn btn-light w-100" role="button" href="/teams">Сбросить</a>
+                </div>
+                <div class="col text-center">
+                    <input class="form-control" type="text" name="name" placeholder="Название" th:value="${name}">
+                </div>
+                <div class="col text-center">
+                    <select class="form-select" name="category" required>
+                        <option th:each="c : ${categories}" th:value="${c}" th:label="${c.name}"
+                                th:selected="${c == category}"></option>
+                    </select>
+                </div>
+                <div class="col-auto text-center">
+                    <button class="btn btn-primary w-100" type="submit">Поиск</button>
+                </div>
+            </div>
+        </form>
+        <div class="row justify-content-center">
+            <div th:each="i : ${teams}" class="col-4 mb-2" data-aos="fade-up">
+                <div class="p-3 bg-dark bg-gradient rounded">
+                    <img class="rounded img-fluid shadow w-100 fit-cover mb-2" th:src="'/img/' + ${i.photo}"
+                         style="height: 250px;">
+                    <p class="lead text-center" th:text="${i.name}"></p>
+                    <p>Категория: <a th:href="'/teams/' + ${i.category}" th:text="${i.category.name}"></a></p>
+                    <p>Страна: <span th:text="${i.country}"></span></p>
+                    <div th:if="${role == 'MANAGER'}" class="row">
+                        <div class="col mb-2">
+                            <a class="btn btn-success w-100" th:href="'/teams/edit/' + ${i.id}">Редактировать</a>
+                        </div>
+                        <div class="col">
+                            <a class="btn btn-danger w-100" th:href="'/teams/delete/' + ${i.id}">Удалить</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:insert="blocks/scripts :: scripts"></div>
+
+</body>
+
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Пользователи</title>
+</head>
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+
+<div class="h-100 w-100 position-fixed" style="background: url(&quot;/img/bg.jpg&quot;) center / cover no-repeat"></div>
+
+<div th:insert="blocks/nav :: nav"></div>
+
+<section class="py-5 position-sticky">
+    <div class="container py-5">
+        <div class="row justify-content-center mb-5">
+            <div class="col-6 text-center bg-dark rounded">
+                <h1 class="m-1">Пользователи</h1>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 m-2">
+                <div class="p-3 bg-dark rounded">
+                    <div class="row">
+                        <div class="col">
+                            <p class="lead text-center">ФИО</p>
+                        </div>
+                        <div class="col">
+                            <p class="lead text-center">Роль</p>
+                        </div>
+                        <div class="col-2"></div>
+                        <div class="col-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div th:each="i : ${users}" class="col-12 mb-1" data-aos="fade-up">
+                <div class="p-3 bg-dark rounded">
+                    <form th:action="'/users/edit/' + ${i.id}" method="post">
+                        <div class="row">
+                            <div class="col"><input th:value="${i.fio}" class="form-control" type="text" readonly="">
+                            </div>
+                            <div class="col">
+                                <select class="form-select" name="role" required>
+                                    <option th:each="r : ${roles}" th:value="${r}" th:label="${r.name}"
+                                            th:selected="${r == i.role}"></option>
+                                </select>
+                            </div>
+                            <div class="col-2">
+                                <button class="btn btn-primary w-100" type="submit">Обновить</button>
+                            </div>
+                            <div class="col-2">
+                                <a class="btn btn-danger w-100" role="button" th:href="'/users/delete/' + ${i.id}">Удалить</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:insert="blocks/scripts :: scripts"></div>
+
+</body>
+
+</html>

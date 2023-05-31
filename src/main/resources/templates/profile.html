@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Профиль</title>
+</head>
+
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+
+<div class="h-100 w-100 position-fixed" style="background: url(&quot;/img/bg.jpg&quot;) center / cover no-repeat"></div>
+
+<div th:insert="blocks/nav :: nav"></div>
+
+<section class="py-5 position-sticky">
+    <div class="container py-5">
+        <div class="row justify-content-center mb-5">
+            <div class="col-6 text-center bg-dark rounded">
+                <h1 class="m-1">Профиль</h1>
+            </div>
+        </div>
+        <form class="bg-dark rounded mb-3 p-2" action="/profile/edit/fio" method="post">
+            <div class="row">
+                <div class="col text-center">
+                    <input th:value="${user.fio}" class="form-control" type="text" name="fio" required></div>
+                <div class="col-auto text-center">
+                    <button class="btn btn-primary w-100" type="submit">Обновить</button>
+                </div>
+            </div>
+        </form>
+        <form class="bg-dark rounded mb-5 p-2" action="/profile/edit/password" method="post">
+            <div class="row">
+                <div class="col text-center">
+                    <input class="form-control" type="text" name="password" placeholder="Введите новый пароль..."
+                           required>
+                </div>
+                <div class="col-auto text-center">
+                    <button class="btn btn-primary w-100" type="submit">Обновить пароль</button>
+                </div>
+            </div>
+        </form>
+        <div class="row justify-content-center">
+            <div th:each="i : ${user.marks}" class="col-4 mb-2" data-aos="fade-up">
+                <div class="p-3 bg-dark bg-gradient rounded">
+                    <a th:href="'/matches/' + ${i.match.id}">
+                        <img class="rounded img-fluid shadow w-100 fit-cover mb-2" th:src="'/img/' + ${i.match.photo}"
+                        style="height: 250px;">
+                    </a>
+                    <p th:text="${i.match.name}" class="lead text-center">Название матча</p>
+                    <p>Категория: <span th:text="${i.match.teamA.category.name}"></span></p>
+                    <p>Статус: <span th:text="${i.match.status.name}"></span></p>
+                    <p>Команда 1: <span th:text="${i.match.teamA.name}"></span></p>
+                    <p>Команда 2: <span th:text="${i.match.teamB.name}"></span></p>
+                    <p>Ваше предположение: <span th:text="${i.Assumption()}"></span></p>
+                    <p th:if="${i.match.status.name() == 'FINISH'}" th:text="${i.match.Winner()}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:insert="blocks/scripts :: scripts"></div>
+
+</body>
+
+</html>

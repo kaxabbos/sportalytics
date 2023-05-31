@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>О нас</title>
+</head>
+
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+
+<div class="h-100 w-100 position-fixed" style="background: url(&quot;/img/bg.jpg&quot;) center / cover no-repeat"></div>
+
+<div th:insert="blocks/nav :: nav"></div>
+
+<section class="py-5 position-sticky">
+    <div class="container py-5">
+        <div class="row justify-content-center mb-5">
+            <div class="col-6 text-center bg-dark rounded">
+                <h1 class="m-1">О нас</h1>
+            </div>
+        </div>
+        <div class="row bg-dark rounded p-3 mb-5">
+            <div class="col-12 mb-2">
+                <p class="lead" style="text-align: justify;">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Accusamus accusantium aliquid aut beatae consequatur culpa debitis, dolores earum exercitationem
+                    labore officia pariatur provident, quidem repellendus reprehenderit saepe tempore voluptas
+                    voluptatum!</p>
+            </div>
+            <div class="col-12 mb-2">
+                <iframe width="100%" height="600" src="https://www.youtube.com/embed/-qAgUKRkodE"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen></iframe>
+            </div>
+            <div class="col-12 mb-2">
+                <p class="lead" style="text-align: justify;">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Accusamus, beatae culpa deleniti ea esse ex excepturi fuga nisi, obcaecati omnis optio possimus
+                    provident quisquam sed veritatis. Cupiditate eius officiis voluptate?</p>
+            </div>
+            <div class="col-12 mb-2">
+                <p class="lead" style="text-align: justify;">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Beatae consequatur cum dignissimos dolore ducimus maiores quibusdam saepe sit, tempore voluptates?
+                    Doloremque ea eligendi nesciunt nisi nulla placeat tempore totam unde?</p>
+            </div>
+            <div class="col-12 mb-2">
+                <p class="lead" style="text-align: justify;">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Ipsa nulla officia, optio provident quae quis sed tempora. Debitis dicta eius, est illum in iste,
+                    magnam magni natus velit, voluptas voluptatum!</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:insert="blocks/scripts :: scripts"></div>
+
+</body>
+
+</html>

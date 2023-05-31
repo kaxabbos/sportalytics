@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title th:text="${match.name}"></title>
+</head>
+
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+
+<div class="h-100 w-100 position-fixed" style="background: url(&quot;/img/bg.jpg&quot;) center / cover no-repeat"></div>
+
+<div th:insert="blocks/nav :: nav"></div>
+
+<section class="py-5" style="position: sticky;">
+    <div class="container py-5">
+        <div class="row justify-content-center mb-5">
+            <div class="col-6 text-center bg-dark rounded">
+                <h1 class="m-1" th:text="${match.name}"></h1>
+            </div>
+        </div>
+        <div class="row bg-dark rounded p-3 mb-5">
+            <div class="col-12 text-center mb-3">
+                <img class="rounded img-fluid shadow w-50 fit-cover" th:src="'/img/' + ${match.photo}"/>
+            </div>
+            <div class="col-3 text-center mb-2">
+                <p class="lead">Категория: <a th:href="'/matches/search/category/' + ${match.teamA.category}"
+                                              th:text="${match.teamA.category.name}"></a></p>
+            </div>
+            <div class="col-3 text-center mb-2">
+                <p class="lead">Статус: <a th:href="'/matches/search/status/' + ${match.status}"
+                                           th:text="${match.status.name}"></a></p>
+            </div>
+            <div class="col-3 text-center mb-2">
+                <p class="lead">Дата: <span th:text="${match.date}"></span></p>
+            </div>
+            <div class="col-3 text-center mb-2">
+                <p class="lead">Время: <span th:text="${match.time}"></span></p>
+            </div>
+            <hr>
+            <div class="col-6 text-center mb-2">
+                <img class="rounded img-fluid shadow w-75 fit-cover mb-2" th:src="'/img/' + ${match.teamA.photo}"/>
+                <p class="lead" th:text="${match.teamA.name}"></p>
+            </div>
+            <div class="col-6 text-center mb-2">
+                <img class="rounded img-fluid shadow w-75 fit-cover mb-2" th:src="'/img/' + ${match.teamB.photo}"/>
+                <p class="lead" th:text="${match.teamB.name}"></p>
+            </div>
+            <hr>
+            <div th:if="${role == 'MANAGER' and match.status.name() == 'PROGRESS'}" class="col-6 text-center mb-2">
+                <a class="btn btn-primary mx-3 w-100" th:href="'/matches/win/teamA/' + ${match.id}">
+                    Победила команда <span th:text="${match.teamA.name}"></span>
+                </a>
+            </div>
+            <div th:if="${role == 'MANAGER' and match.status.name() == 'WAITING'}" class="col-12 text-center mb-2">
+                <a class="btn btn-primary mx-3 w-100" th:href="'/matches/start/' + ${match.id}">Матч начался</a>
+            </div>
+            <div th:if="${role == 'MANAGER' and match.status.name() == 'PROGRESS'}" class="col-6 text-center mb-2">
+                <a class="btn btn-primary mx-3 w-100" th:href="'/matches/win/teamB/' + ${match.id}">
+                    Победила команда <span th:text="${match.teamA.name}"></span>
+                </a>
+            </div>
+            <div th:if="${match.status.name() == 'FINISH'}" class="col-12 text-center mb-2">
+                <p class="lead" th:text="${match.Winner()}"></p>
+            </div>
+            <hr>
+            <div class="col-12 text-center mb-2">
+                <p class="lead">Голосование</p>
+            </div>
+            <div class="col-6 text-center mb-2">
+                <p class="lead">Команда <span th:text="${match.teamA.name}"></span></p>
+            </div>
+            <div class="col-6 text-center mb-2">
+                <p class="lead">Команда <span th:text="${match.teamB.name}"></span></p>
+            </div>
+            <div class="col-6 text-center mb-2">
+                <p class="lead"><span th:text="${match.stats.teamA}"></span> <span th:text="'('+${match.stats.TeamA()}+'%)'"></span></p>
+            </div>
+            <div class="col-6 text-center mb-2">
+                <p class="lead"><span th:text="${match.stats.teamB}"></span> <span th:text="'('+${match.stats.TeamB()}+'%)'"></span></p>
+            </div>
+            <hr>
+            <div th:if="${mark}" class="col-12 text-center mb-2">
+                <p class="lead">Ваш предполагаемый исход: <span th:text="${mark.Assumption()}"></span></p>
+            </div>
+            <div th:if="${match.status.name() == 'FINISH' and mark != null}" class="col-12 text-center mb-2">
+                <p class="lead" th:if="${match.winner == mark.assumption}">Ваш предполагаемый исход был правильный</p>
+                <p class="lead" th:if="${match.winner != mark.assumption}">Ваш предполагаемый исход был неправильным</p>
+            </div>
+            <div th:if="${match.status.name() == 'WAITING'}" th:unless="${mark}" class="col-12 text-center mb-2">
+                <p class="lead">Какой исход?</p>
+            </div>
+            <div th:if="${match.status.name() == 'WAITING'}" th:unless="${mark}" class="col-6 text-center mb-2">
+                <a th:href="'/matches/assumption/teamA/' + ${match.id}" class="btn btn-primary w-100" type="button">
+                    <span th:text="${match.teamA.name}"></span>
+                </a>
+            </div>
+            <div th:if="${match.status.name() == 'WAITING'}" th:unless="${mark}" class="col-6 text-center mb-2">
+                <a th:href="'/matches/assumption/teamB/' + ${match.id}" class="btn btn-primary w-100" type="button">
+                    <span th:text="${match.teamB.name}"></span></a>
+            </div>
+        </div>
+        <form class="bg-dark rounded p-3 mb-5" th:action="'/matches/opinion/' + ${match.id}">
+            <div class="row">
+                <div class="col">
+                    <input class="form-control" type="text" name="text" placeholder="Напишите свое мнение о матче..."
+                           required/>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary" type="submit">Добавить</button>
+                </div>
+            </div>
+        </form>
+        <div th:if="${match.opinions.size()}" class="row bg-dark rounded p-3 mb-1" data-aos="fade-up">
+            <div th:each="i : ${match.opinions}" class="col-12 text-start mb-2" data-aos="fade-up">
+                <p class="lead">
+                    <span th:text="${i.owner.fio}">ФИО</span>
+                    <span>|</span>
+                    <span th:text="${i.date}"></span>
+                </p>
+                <p class="lead" th:text="${i.text}"></p>
+                <hr>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:insert="blocks/scripts :: scripts"></div>
+
+</body>
+
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Предстоящие матчи</title>
+</head>
+
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+
+<div class="h-100 w-100 position-fixed" style="background: url(&quot;/img/bg.jpg&quot;) center / cover no-repeat"></div>
+
+<div th:insert="blocks/nav :: nav"></div>
+
+<section class="py-5 position-sticky">
+    <div class="container py-5">
+        <div class="row justify-content-center mb-5">
+            <div class="col-6 text-center bg-dark rounded">
+                <h1 class="m-1">Предстоящие матчи</h1>
+            </div>
+        </div>
+        <form th:if="${role == 'MANAGER'}" class="mb-5" action="/matches/add/" method="get">
+            <div class="row justify-content-center">
+                <div class="col-4 text-center">
+                    <select class="form-select" name="category" required>
+                        <option th:each="c : ${categories}" th:value="${c}" th:label="${c.name}"></option>
+                    </select>
+                </div>
+                <div class="col-auto text-center">
+                    <button class="btn btn-primary" type="submit">Добавить</button>
+                </div>
+            </div>
+        </form>
+        <form class="bg-dark rounded mb-5 p-2" action="/matches/search/" method="get">
+            <div class="row">
+                <div class="col-auto text-center">
+                    <a class="btn btn-light w-100" role="button" href="/matches">Сбросить</a>
+                </div>
+                <div class="col text-center">
+                    <input class="form-control" type="text" name="name" placeholder="Название" th:value="${name}">
+                </div>
+                <div class="col text-center">
+                    <select class="form-select" name="status" required>
+                        <option th:each="m : ${matchStatuses}" th:value="${m}" th:label="${m.name}"
+                                th:selected="${m == status}"></option>
+                    </select>
+                </div>
+                <div class="col text-center">
+                    <select class="form-select" name="category" required>
+                        <option th:each="c : ${categories}" th:value="${c}" th:label="${c.name}"
+                                th:selected="${c == category}"></option>
+                    </select>
+                </div>
+                <div class="col-auto text-center">
+                    <button class="btn btn-primary w-100" type="submit">Поиск</button>
+                </div>
+            </div>
+        </form>
+        <div class="row justify-content-center">
+            <div th:each="i : ${matches}" class="col-4 mb-2" data-aos="fade-up">
+                <div class="p-3 bg-dark bg-gradient rounded">
+                    <a th:href="'/matches/' + ${i.id}">
+                        <img class="rounded img-fluid shadow w-100 fit-cover mb-2" th:src="'/img/' + ${i.photo}"
+                             style="height: 250px;">
+                    </a>
+                    <p class="lead text-center" th:text="${i.name}"></p>
+                    <p>Категория: <a th:href="'/matches/search/category/' + ${i.teamA.category}" th:text="${i.teamA.category.name}"></a></p>
+                    <p>Статус: <a th:href="'/matches/search/status/' + ${i.status}" th:text="${i.status.name}"></a></p>
+                    <p>Команда 1: <span th:text="${i.teamA.name}"></span></p>
+                    <p>Команда 2: <span th:text="${i.teamB.name}"></span></p>
+                    <p th:if="${i.status.name() == 'FINISH'}" th:text="${i.Winner()}"></p>
+                    <div th:if="${role == 'MANAGER'}" class="row">
+                        <div th:if="${i.status.name() == 'WAITING'}" class="col mb-2">
+                            <a class="btn btn-success w-100" role="button" th:href="'/matches/edit/' + ${i.id}">Редактировать</a>
+                        </div>
+                        <div class="col">
+                            <a class="btn btn-danger w-100" role="button"
+                               th:href="'/matches/delete/' + ${i.id}">Удалить</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:insert="blocks/scripts :: scripts"></div>
+
+</body>
+
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Вход</title>
+</head>
+
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+
+<div class="h-100 w-100 position-fixed" style="background: url(&quot;/img/bg.jpg&quot;) center / cover no-repeat"></div>
+
+<div th:insert="blocks/nav :: nav"></div>
+
+<section class="py-5 position-sticky">
+    <div class="container py-5">
+        <div class="row justify-content-center mb-5">
+            <div class="col-4 text-center bg-dark rounded">
+                <h1 class="m-1">Вход</h1>
+            </div>
+        </div>
+        <div th:if="${param.error}" class="row">
+            <div class="col-3"></div>
+            <div class="col-6" align="center">
+                <div class="alert alert-warning" role="alert">
+                    <strong>Некорректный ввод логин или пароля!</strong>
+                </div>
+            </div>
+            <div class="col-3"></div>
+        </div>
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-6 col-xl-4">
+                <div class="card">
+                    <div class="card-body text-center d-flex flex-column align-items-center">
+                        <div class="bs-icon-xl bs-icon-circle bs-icon-primary shadow bs-icon my-4">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <form method="post" action="/login">
+                            <div class="mb-3"><input class="form-control" type="text" name="username"
+                                                     placeholder="Логин" required></div>
+                            <div class="mb-3"><input class="form-control" type="password" name="password"
+                                                     placeholder="Пароль" required></div>
+                            <div class="mb-3">
+                                <button class="btn btn-primary shadow d-block w-100" type="submit">Вход</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:insert="blocks/scripts :: scripts"></div>
+
+</body>
+
+</html>

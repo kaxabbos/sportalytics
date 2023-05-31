@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Обновить данные о матче</title>
+</head>
+
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+
+<div class="h-100 w-100 position-fixed" style="background: url(&quot;/img/bg.jpg&quot;) center / cover no-repeat"></div>
+
+<div th:insert="blocks/nav :: nav"></div>
+
+<section class="py-5 position-sticky">
+    <div class="container py-5">
+        <div class="row justify-content-center mb-5">
+            <div class="col-6 text-center bg-dark rounded">
+                <h1 class="m-1">Обновить данные о матче</h1>
+            </div>
+        </div>
+        <div th:if="${message}" class="row">
+            <div class="col-3"></div>
+            <div class="col-6" align="center">
+                <div class="alert alert-warning" role="alert">
+                    <strong th:text="${message}"></strong>
+                </div>
+            </div>
+            <div class="col-3"></div>
+        </div>
+        <form class="bg-dark rounded p-3" enctype="multipart/form-data" method="post" th:action="'/matches/edit/' + ${match.id}">
+            <div class="row">
+                <div class="col-6 my-1">
+                    <input class="form-control" type="text" name="name" placeholder="Название" required
+                           th:value="${match.name}">
+                </div>
+                <div class="col-6 my-1">
+                    <select class="form-control" name="category" required readonly>
+                        <option th:value="${category}" th:label="${category.name}"></option>
+                    </select>
+                </div>
+                <div class="col-6 my-1"><input class="form-control" type="date" name="date" required
+                                               th:value="${match.date}"></div>
+                <div class="col-6 my-1"><input class="form-control" type="time" name="time" required
+                                               th:value="${match.time}"></div>
+                <div class="col-6 my-1">
+                    <select class="form-select" name="teamA" required>
+                        <option value="0" selected="">Выберите 1 команду</option>
+                        <option th:each="i : ${teams}" th:value="${i.id}" th:label="${i.name}"
+                                th:selected="${i.id == match.teamA.id}"></option>
+                    </select>
+                </div>
+                <div class="col-6 my-1">
+                    <select class="form-select" name="teamB" required>
+                        <option value="0" selected="">Выберите 2 команду</option>
+                        <option th:each="i : ${teams}" th:value="${i.id}" th:label="${i.name}"
+                                th:selected="${i.id == match.teamB.id}"></option>
+                    </select>
+                </div>
+                <div class="col-6 my-1">
+                    <input class="form-control" type="file" name="file" accept="image/*">
+                </div>
+                <div class="col-12 my-1">
+                    <button class="btn btn-primary" type="submit">Обновить</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<div th:insert="blocks/scripts :: scripts"></div>
+
+</body>
+
+</html>

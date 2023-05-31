@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Добавить матч</title>
+</head>
+
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+
+<div class="h-100 w-100 position-fixed" style="background: url(&quot;/img/bg.jpg&quot;) center / cover no-repeat"></div>
+
+<div th:insert="blocks/nav :: nav"></div>
+
+<section class="py-5 position-sticky">
+    <div class="container py-5">
+        <div class="row justify-content-center mb-5">
+            <div class="col-6 text-center bg-dark rounded">
+                <h1 class="m-1">Добавить матч</h1>
+            </div>
+        </div>
+        <div th:if="${message}" class="row">
+            <div class="col-3"></div>
+            <div class="col-6" align="center">
+                <div class="alert alert-warning" role="alert">
+                    <strong th:text="${message}"></strong>
+                </div>
+            </div>
+            <div class="col-3"></div>
+        </div>
+        <form class="bg-dark rounded p-3" enctype="multipart/form-data" method="post" action="/matches/add">
+            <div class="row">
+                <div class="col-6 my-1">
+                    <input class="form-control" type="text" name="name" placeholder="Название" required>
+                </div>
+                <div class="col-6 my-1">
+                    <select class="form-control" name="category" required readonly>
+                        <option th:value="${category}" th:label="${category.name}"></option>
+                    </select>
+                </div>
+                <div class="col-6 my-1"><input class="form-control" type="date" name="date" required></div>
+                <div class="col-6 my-1"><input class="form-control" type="time" name="time" required></div>
+                <div class="col-6 my-1">
+                    <select class="form-select" name="teamA" required>
+                        <option value="0" selected="">Выберите 1 команду</option>
+                        <option th:each="i : ${teams}" th:value="${i.id}" th:label="${i.name}"></option>
+                    </select>
+                </div>
+                <div class="col-6 my-1">
+                    <select class="form-select" name="teamB" required>
+                        <option value="0" selected="">Выберите 2 команду</option>
+                        <option th:each="i : ${teams}" th:value="${i.id}" th:label="${i.name}"></option>
+                    </select>
+                </div>
+                <div class="col-6 my-1">
+                    <input class="form-control" type="file" name="file" required accept="image/*">
+                </div>
+                <div class="col-12 my-1">
+                    <button class="btn btn-primary" type="submit">Добавить</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<div th:insert="blocks/scripts :: scripts"></div>
+
+</body>
+
+</html>
